@@ -45,16 +45,12 @@
             body: JSON.stringify(loginData)
         })
         .then(response => {
-            /* if (response.ok) {
-                window.location.href = "/dashboard.html"; // Success!
+            if (response.ok) {
+                document.getElementById("testStatus").innerText = "Welcome, user";
+                // window.location.href = "/dashboard.html"; // Success!
             } else {
                 document.getElementById('errorMessage').classList.remove('d-none');
-            } */
-
-            return response.text();
-        })
-        .then(data => {
-            document.getElementById("testStatus").innerText = data;
+            }
         })
         .catch(err => console.error("Login Error:", err));
     });

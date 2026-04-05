@@ -1,5 +1,6 @@
 package com.app.service;
 
+import com.app.entity.LoginStatus;
 import com.app.entity.User;
 import com.app.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,20 +13,23 @@ public class AuthService {
     @Autowired
     private UserRepository userRepository;
 
-    public String login(String username, String password) {
+    public LoginStatus login(String username, String password) {
         Optional<User> userOpt = userRepository.findByUsername(username);
 
-        if (userOpt.isPresent()) {
-            User user = userOpt.get();
-
-            // In a real project, use BCrypt for password hashing!)
-
-            if (user.getPassword().equals(password)) {
-                return "Login successful! Welcome " + user.getFullName() + " (" + user.getRole() + ")";
-            }
+        // 1. Check if user exists
+        if (userOpt.isEmpty()) {
+            return LoginStatus.USER_NOT_FOUND;
         }
-        return "Invalid username or password!";
 
+        User user = userOpt.get();
+
+        // 2. Check if password matches
+        if (!user.getPassword().equals(password)) {
+            return LoginStatus.WRONG_PASSWORD;
+        }
+
+        // 3. Everything is correct
+        return LoginStatus.SUCCESS;
 
         
     }

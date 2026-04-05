@@ -1,7 +1,7 @@
 package com.app.dto;
 
 // Login
-public class LoginData {
+public class LoginRequest {
     private String username;
     private String password;
 
