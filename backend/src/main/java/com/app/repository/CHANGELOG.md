@@ -1,6 +1,6 @@
 # NƠI NÀY DÙNG ĐỂ GHI LẠI LỊCH SỬ CẬP NHẬT
 
-## -- Ngày 4/5/2026 - 10:52 AM 🕙
+## -- Ngày 4/5/2026 - 10:52 AM nằm trong branch: feature/user-auth-logic🕙
 
 TẠO RA THÊM CÁI MỚI:
 - ### **website_IU\backend\src\main\java\com\app\entity\LoginStatus.java: nơi này dùng để check xem trạng thái người dùng đăng nhập (bị khoá tài khoản, sai mật khẩu...) 🌟🌟**
