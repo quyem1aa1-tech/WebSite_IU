@@ -30,6 +30,12 @@ In application.properties: deleted line: server.servlet.context-path=/api // Rea
 
 TẠO RA THÊM CÁI MỚI:
 - ### **website_IU\backend\src\main\java\com\app\entity\LoginStatus.java: nơi này dùng để check xem trạng thái người dùng đăng nhập (bị khoá tài khoản, sai mật khẩu...) 🌟🌟**
+
+
+## -- Ngày 4/5/2026 - 10:52 AM nằm trong branch: feature/user-auth-logic🕙
+
+TẠO RA THÊM CÁI MỚI:
+- ### **website_IU\backend\src\main\java\com\app\entity\LoginStatus.java: nơi này dùng để check xem trạng thái người dùng đăng nhập (bị khoá tài khoản, sai mật khẩu...) 🌟🌟**
 - ### **website_IU\backend\src\main\java\com\app\entity\User.java: nơi này là cái sườn để tạo ra một đối tượng người dùng 🌟🌟**
 - ### **website_IU\backend\src\main\java\com\app\entity\UserRole.java: nơi này chia role giáo viên, học sinh, và admin 🌟🌟**
 - ### **website_IU\backend\src\main\java\com\app\repository\UserRepository.java: một hàm để truy xuất bên trong Optional<User> (chưa biết có hay chưa) bằng findByUsername(...) 🌟🌟**
