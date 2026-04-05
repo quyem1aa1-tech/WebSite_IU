@@ -3,10 +3,10 @@
 -- Ngày 4/5/2026 - 10:52 AM 🕙
 
 TẠO RA THÊM CÁI MỚI:
-- website_IU\backend\src\main\java\com\app\entity\LoginStatus.java: nơi này dùng để check xem trạng thái người dùng đăng nhập (bị khoá tài khoản, sai mật khẩu...) 🌟🌟
-- website_IU\backend\src\main\java\com\app\entity\User.java: nơi này là cái sườn để tạo ra một đối tượng người dùng 🌟🌟
-- website_IU\backend\src\main\java\com\app\entity\UserRole.java: nơi này chia role giáo viên, học sinh, và admin 🌟🌟
-- website_IU\backend\src\main\java\com\app\repository\UserRepository.java: một hàm để truy xuất bên trong Optional<User> (chưa biết có hay chưa) bằng findByUsername(...) 🌟🌟
+- **website_IU\backend\src\main\java\com\app\entity\LoginStatus.java: nơi này dùng để check xem trạng thái người dùng đăng nhập (bị khoá tài khoản, sai mật khẩu...) 🌟🌟**
+- **website_IU\backend\src\main\java\com\app\entity\User.java: nơi này là cái sườn để tạo ra một đối tượng người dùng 🌟🌟**
+- **website_IU\backend\src\main\java\com\app\entity\UserRole.java: nơi này chia role giáo viên, học sinh, và admin 🌟🌟**
+- **website_IU\backend\src\main\java\com\app\repository\UserRepository.java: một hàm để truy xuất bên trong Optional<User> (chưa biết có hay chưa) bằng findByUsername(...) 🌟🌟**
   
 - website_IU\backend\src\main\java\com\app\service\AuthService.java: File AuthService.java 🌟:
 
@@ -18,7 +18,7 @@ TẠO RA THÊM CÁI MỚI:
 
 Lưu ý kỹ thuật: Hiện đang so sánh mật khẩu dạng văn bản thuần (Plain-text). Cần nâng cấp lên BCrypt ở nhánh dev2 để bảo mật hơn. ⚠️⚠️
 
-- website_IU\backend\src\main\java\com\app\service\UserService.java: UserService.java 🌟🌟:
+- **website_IU\backend\src\main\java\com\app\service\UserService.java: UserService.java 🌟🌟:**
 
 **Thông tin về file** ❗❗
 1. Tích hợp Enum LoginStatus: Thay vì trả về đúng/sai đơn giản, giờ đây hệ thống đã có thể "nói" chính xác tại sao đăng nhập thất bại (Sai tên hay sai pass).
@@ -39,7 +39,7 @@ B4: Nếu sai pass -> Trả về WRONG_PASSWORD.
 
 B5: Nếu khớp -> Trả về SUCCESS.
 
-- website_IU\backend\src\main\java\com\app\dto\AuthControllerse.java: AuthResponse.java 🌟🌟:
+**- website_IU\backend\src\main\java\com\app\dto\AuthControllerse.java: AuthResponse.java 🌟🌟:**
 
  **Thông tin về file ❗❗**
   
@@ -52,7 +52,7 @@ Nhiệm vụ: Chuẩn hóa dữ liệu trả về cho Client (Postman/Browser).
 
 3. Tạo ra một cấu trúc JSON đồng nhất, giúp phía Frontend dễ dàng xử lý logic.
 
-- website_IU\backend\src\main\java\com\app\controller\AuthController.java 🌟🌟:
+**- website_IU\backend\src\main\java\com\app\controller\AuthController.java 🌟🌟:**
 
 **👀👀 Luồng Logic 👀👀:**
 1. Nhận đầu vào: Lấy username và password từ @RequestParam (Form-encode).
