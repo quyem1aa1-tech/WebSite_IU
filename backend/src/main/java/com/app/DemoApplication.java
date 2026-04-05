@@ -40,7 +40,8 @@ public class DemoApplication {
         logger.info("===============================================");
     }
 
-    // Thêm vào trong class DemoApplication
+    // Thêm đối tượng vào Application
+
     @Bean
     CommandLineRunner initDatabase(UserRepository repository) {
         return args -> {
