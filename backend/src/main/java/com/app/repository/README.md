@@ -19,5 +19,5 @@ Dự án mini-project xây dựng hệ thống website mạng nội bộ dành c
 4. Run ứng dụng qua file `DemoApplication.java`.
 
 ## ✨ Tính năng dự kiến
-- [ ] Đăng nhập học sinh
+- [x] Đăng nhập học sinh
 - [ ] Đăng ký tài khoản học sinh (uppdate thêm nhiệm email nữa)
