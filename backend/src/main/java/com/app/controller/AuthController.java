@@ -1,6 +1,7 @@
 package com.app.controller;
 
 import com.app.dto.AuthResponse;
+import com.app.entity.LoginData;
 import com.app.service.UserService;
 import com.app.entity.LoginStatus;
 import com.app.entity.User;
@@ -17,15 +18,15 @@ public class AuthController {
     private UserService userService;
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestParam String username, @RequestParam String password) {
-        LoginStatus status = userService.processLogin(username, password);
+    public ResponseEntity<?> login(@RequestBody LoginData data) {
+        LoginStatus status = userService.processLogin(data.getUsername(), data.getPassword());
 
         switch (status) {
             case SUCCESS:
 
                 // Take old information from user to return
 
-                User user = userService.getUserByUsername(username).get();
+                User user = userService.getUserByUsername(data.getUsername()).get();
                 return ResponseEntity.ok(new AuthResponse("success", "Welcome!", user.getUsername(), user.getRole()));
 
             case USER_NOT_FOUND:
