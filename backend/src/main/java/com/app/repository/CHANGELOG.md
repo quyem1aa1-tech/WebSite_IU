@@ -5,10 +5,10 @@
 TẠO RA THÊM CÁI MỚI:
 - ### **website_IU\backend\src\main\java\com\app\entity\LoginStatus.java: nơi này dùng để check xem trạng thái người dùng đăng nhập (bị khoá tài khoản, sai mật khẩu...) 🌟🌟**
 - ### **website_IU\backend\src\main\java\com\app\entity\User.java: nơi này là cái sườn để tạo ra một đối tượng người dùng 🌟🌟**
-- ###**website_IU\backend\src\main\java\com\app\entity\UserRole.java: nơi này chia role giáo viên, học sinh, và admin 🌟🌟**
+- ### **website_IU\backend\src\main\java\com\app\entity\UserRole.java: nơi này chia role giáo viên, học sinh, và admin 🌟🌟**
 - ### **website_IU\backend\src\main\java\com\app\repository\UserRepository.java: một hàm để truy xuất bên trong Optional<User> (chưa biết có hay chưa) bằng findByUsername(...) 🌟🌟**
   
-**- website_IU\backend\src\main\java\com\app\service\AuthService.java: File AuthService.java 🌟🌟:**
+**-### website_IU\backend\src\main\java\com\app\service\AuthService.java: File AuthService.java 🌟🌟:**
 
 **Thông tin về file** ❗❗
 
