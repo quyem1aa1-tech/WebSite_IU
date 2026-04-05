@@ -16,7 +16,7 @@ TẠO RA THÊM CÁI MỚI:
 ⚠️⚠️ Lưu ý kỹ thuật: Hiện đang so sánh mật khẩu dạng văn bản thuần (Plain-text). Cần nâng cấp lên BCrypt ở nhánh dev2 để bảo mật hơn.
 
 - website_IU\backend\src\main\java\com\app\service\UserService.java: UserService.java 🌟🌟:
-❗❗ **Thông tin về file** ❗❗:
+.❗❗ **Thông tin về file** ❗❗:
 1. Tích hợp Enum LoginStatus: Thay vì trả về đúng/sai đơn giản, giờ đây hệ thống đã có thể "nói" chính xác tại sao đăng nhập thất bại (Sai tên hay sai pass).
 
 2. Sử dụng Optional<User>: Đảm bảo an toàn tuyệt đối khi tìm kiếm, không lo bị crash app nếu gõ nhầm tên user.
