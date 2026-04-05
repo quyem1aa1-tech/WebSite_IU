@@ -20,4 +20,4 @@ Dự án mini-project xây dựng hệ thống website mạng nội bộ dành c
 
 ## ✨ Tính năng dự kiến
 - [ ] Đăng nhập học sinh
-- [ ] Đăng ký tài khoản học sinh
+- [ ] Đăng ký tài khoản học sinh (uppdate thêm nhiệm email nữa)
