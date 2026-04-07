@@ -20,4 +20,8 @@ Dự án mini-project xây dựng hệ thống website mạng nội bộ dành c
 
 ## ✨ Tính năng dự kiến
 - [ ] Đăng nhập học sinh
-- [ ] Đăng ký tài khoản học sinh (uppdate thêm nhiệm email nữa)
+- [ ] Đăng ký tài khoản học sinh (update thêm nhiệm email nữa)
+- [ ] Kiểm tra khoá học của học sinh
+- [ ] Phương thức đăng ký môn học
+- [ ] Phưng thức xoá bỏ môn học
+- [ ] (đang cập nhật)
