@@ -7,13 +7,15 @@ public class AuthResponse {
     private String message;
     private String username;
     private UserRole role;
+    private String fullName;
 
     // Constructor
-    public AuthResponse(String status, String message, String username, UserRole role) {
+    public AuthResponse(String status, String message, String username, UserRole role, String fullName) {
         this.status = status;
         this.message = message;
         this.username = username;
         this.role = role;
+        this.fullName = fullName;
     }
 
     // Getters and Setters (Important for JSON conversion)
@@ -31,5 +33,13 @@ public class AuthResponse {
 
     public UserRole getRole() {
         return role;
+    }
+
+    public String getFullName(){
+        return "Welcome: " + fullName;
+    }
+
+    public void setFullName(String fullName){
+        this.fullName = fullName;
     }
 }

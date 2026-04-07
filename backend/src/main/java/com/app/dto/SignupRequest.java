@@ -1,11 +1,21 @@
 package com.app.dto;
 
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotBlank;
+
 import com.app.entity.UserRole;
 
 public class SignupRequest {
+    @NotBlank(message = "Username cannot be blank")
     private String username;
+
+    @NotBlank(message = "Full name is required")
     private String password;
+
+    @NotBlank(message = "Password cannot be blank")
     private String fullName;
+
+    @NotNull(message = "Role is required")
     private UserRole role; // e.g., "STUDENT" or "TEACHER"
 
     public String getUsername() {

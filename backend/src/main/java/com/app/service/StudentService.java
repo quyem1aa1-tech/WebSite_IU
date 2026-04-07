@@ -1,0 +1,75 @@
+package com.app.service;
+
+import java.util.*;
+import com.app.entity.Course;
+import com.app.entity.User;
+import com.app.repository.CourseRepository;
+import com.app.repository.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Set;
+
+@Service
+public class StudentService {
+
+    @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
+    private CourseRepository courseRepository;
+
+    /**
+     * Thực hiện đăng ký môn học cho sinh viên.
+     * 
+     * @param userId   ID của người dùng (Student)
+     * @param courseId ID của khóa học cần đăng ký
+     * @return Thông báo trạng thái (SUCCESS/ERROR)
+     * @throws RuntimeException nếu không tìm thấy User hoặc Course
+     */
+    @Transactional // Đảm bảo tính Atomic: Hoặc lưu cả 2 bên thành công, hoặc không lưu gì cả để
+                   // tránh rác dữ liệu
+    public String enrollInCourse(Long userId, Long courseId) {
+
+        // 1. Kiểm tra sự tồn tại của thực thể trong Database
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("LỖI: Không tìm thấy ID sinh viên: " + userId));
+
+        Course course = courseRepository.findById(courseId)
+                .orElseThrow(() -> new RuntimeException("LỖI: Không tìm thấy ID khóa học: " + courseId));
+
+        // 2. Kiểm tra nghiệp vụ (Business Logic): Tránh đăng ký trùng lặp
+        // Sử dụng hàm contains() của Set để đạt hiệu năng O(1)
+        if (user.getCourses().contains(course)) {
+            return "ERROR: Bạn đã đăng ký môn học này từ trước!";
+        }
+
+        // 3. Thực hiện "Bắt tay" 2 chiều (Bidirectional Mapping)
+        // Gọi hàm addStudent bên class Course để tự động cập nhật danh sách ở cả 2
+        // Entity
+        course.addStudent(user);
+
+        // 4. Lưu lại phía "Chủ" (Owner Side) - Bảng trung gian course_student sẽ được
+        // cập nhật
+        courseRepository.save(course);
+
+        return "SUCCESS: Đăng ký thành công môn " + course.getCourseName();
+    }
+
+    /**
+     * Lấy danh sách các khóa học mà một sinh viên đang tham gia.
+     */
+    public Set<Course> getStudentCourses(Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+        return user.getCourses();
+    }
+
+    /**
+     * Truy vấn toàn bộ danh sách khóa học hiện có trong hệ thống.
+     */
+    public List<Course> getAllCourses() {
+        return courseRepository.findAll();
+    }
+}

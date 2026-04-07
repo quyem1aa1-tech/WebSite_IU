@@ -1,6 +1,8 @@
 package com.app.entity;
 
 import jakarta.persistence.*;
+import java.util.HashSet; // MỚI THÊM VÀO
+import java.util.Set; // MỚI THÊM VÀO
 
 @Entity
 @Table(name = "users")
@@ -22,6 +24,9 @@ public class User {
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private UserRole role;
+
+    @ManyToMany(mappedBy = "liststudents")
+    private Set<Course> courses = new HashSet<>(); // Thêm khoá học trong học sinh
 
     // Default Constructor (Required by JPA)
     public User() {
@@ -74,5 +79,14 @@ public class User {
 
     public void setRole(UserRole role) {
         this.role = role;
+    }
+
+    // ================= MỚI THÊM VÀO NGÀY 4/7 =================
+    public Set<Course> getCourses() {
+        return courses;
+    }
+
+    public void setCourses(Set<Course> courses) {
+        this.courses = courses;
     }
 }

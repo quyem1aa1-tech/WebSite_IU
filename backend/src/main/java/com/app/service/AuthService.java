@@ -3,6 +3,7 @@ package com.app.service;
 import com.app.dto.SignupRequest;
 import com.app.entity.LoginStatus;
 import com.app.entity.User;
+import com.app.entity.UserRole;
 import com.app.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -34,10 +35,20 @@ public class AuthService {
 
     }
 
+    // hàm yêu cầu
     public String registerUser(SignupRequest request) {
+
         // 1. Check if user exists
         if (userRepository.findByUsername(request.getUsername()).isPresent()) {
             return "ERROR: Username already taken";
+        }
+
+        // 1.5 FIX: the user must write full name !
+        if (request.getFullName() == null || request.getFullName().trim().isEmpty()) {
+            return "ERROR: Full Name is required and cannot be blank";
+        }
+        if (request.getRole() == null) {
+            return "ERROR: Role is required! Please choose a role.";
         }
 
         // 2. Create new User entity
