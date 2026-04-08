@@ -1,5 +1,24 @@
 # NƠI NÀY DÙNG ĐỂ GHI LẠI LỊCH SỬ CẬP NHẬT
 
+## -- Ngày 4/8/2026 - 10:10 PM nằm trong branch: feature/user-auth-logic -- Trấn Vinh🕙
+
+## CHỈNH SỬA FILE:
+
+**1. website_IU\backend\src\main\java\com\app\controller\StudentController.java 🌟🌟**
+ - Tạo hàm dropCourse: xóa môn học của sinh viên -> trả về status
+
+**2. website_IU\backend\src\main\java\com\app\service\StudentService.java 🌟🌟**
+ - Tạo hàm dropCourse: thực hiện báo lỗi và xóa môn học + lưu trên database
+
+**3. website_IU\backend\src\main\java\com\app\entity\Course.java 🌟🌟**
+ - Override equals() và hashCode(): tránh lỗi khi so sánh sử dụng Set
+   ** equals(): Chỉ so sánh Id ** ❗❗
+
+**4. website_IU\backend\src\main\java\com\app\entity\User.java 🌟🌟**
+ - Tạo findCourseById() : tìm môn qua id trong User
+ - Tạo findCourseByName() : tìm môn qua courseName trong User
+ - Tạo getCourseCount() : trả về số lượng môn đăng kí
+
 ## Ngày 4/7/2026: 9:00 AM nằm trong branch feature/student-course-management - Trương Thế Vinh 🕙
 
 ### III. Chi tiết về từng file

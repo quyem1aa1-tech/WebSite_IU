@@ -57,6 +57,28 @@ public class StudentService {
         return "SUCCESS: Đăng ký thành công môn " + course.getCourseName();
     }
 
+    @Transactional
+    public String dropCourse(Long userId, Long courseId) {
+
+        // 1. Fetch the student and the course
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("LỖI: Không tìm thấy ID sinh viên: " + userId));
+
+        if (user.findCourseById(courseId) == null) {
+            throw new RuntimeException("LỖI: Không tìm thấy ID khóa học của sinh viên: " + courseId);
+        }
+        Course course = user.findCourseById(courseId);
+
+        // 2. Remove the course from the student's Set
+        // This automatically handles the "Join Table" update in JPA
+        course.removeStudent(user);
+
+        // 3. Save (the relationship is updated)
+        courseRepository.save(course);
+
+        return "SUCCESS: Xóa/Bỏ thành công môn " + course.getCourseName();
+    }
+
     /**
      * Lấy danh sách các khóa học mà một sinh viên đang tham gia.
      */
@@ -72,4 +94,6 @@ public class StudentService {
     public List<Course> getAllCourses() {
         return courseRepository.findAll();
     }
+
+
 }

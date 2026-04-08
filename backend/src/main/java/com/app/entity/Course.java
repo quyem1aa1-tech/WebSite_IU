@@ -2,6 +2,7 @@ package com.app.entity;
 
 import jakarta.persistence.*;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 @Entity
@@ -52,8 +53,9 @@ public class Course {
     }
 
     public int getStudentCount() {
-        if (this.liststudents == null)
+        if (this.liststudents == null) {
             return 0;
+        }
         return this.liststudents.size();
     }
 
@@ -67,4 +69,19 @@ public class Course {
         this.liststudents.remove(user);
         user.getCourses().remove(this);
     }
+
+    // ================ Override Hàm để dùng Set<> ==================
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Course course = (Course) o;
+        return Objects.equals(id, course.id); // Compare by ID
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
+
 }

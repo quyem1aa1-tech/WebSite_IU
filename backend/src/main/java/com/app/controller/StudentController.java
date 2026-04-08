@@ -22,9 +22,10 @@ public class StudentController {
     /**
      * API Đăng ký môn học (Many-to-Many Enrollment)
      * URL ví dụ: POST http://localhost:8080/api/students/1/enroll/5
-     * * @param userId   ID của sinh viên thực hiện đăng ký
+     * @param userId   ID của sinh viên thực hiện đăng ký
      * @param courseId ID của khóa học muốn tham gia
-     * @return 200 OK nếu thành công | 400 Bad Request nếu logic nghiệp vụ bị lỗi (VD: trùng môn)
+     *
+     * @return 200 OK nếu thành công | 400 Bad Request kèm "error message" nếu logic nghiệp vụ bị lỗi (VD: trùng môn)
      */
     @PostMapping("/{userId}/enroll/{courseId}")
     public ResponseEntity<String> enrollInCourse(@PathVariable Long userId, @PathVariable Long courseId) {
@@ -38,9 +39,26 @@ public class StudentController {
     }
 
     /**
+     * API Bỏ môn học (Many-to-Many Enrollment)
+     * URL ví dụ: POST http://localhost:8080/api/students/1/drop/5
+     * @param userId   ID của sinh viên thực hiện đăng ký
+     * @param courseId ID của khóa học muốn tham gia
+     *
+     * @return 200 OK nếu thành công | 400 Bad Request kèm "error message" nếu logic nghiệp vụ bị lỗi (VD: không đăng kí môn)
+     */
+    @DeleteMapping("/{userId}/drop/{courseId}")
+    public ResponseEntity<String> dropCourse(@PathVariable Long userId, @PathVariable Long courseId) {
+        String result = studentService.dropCourse(userId, courseId);
+        return result.startsWith("SUCCESS")
+                ? ResponseEntity.ok(result)
+                : ResponseEntity.badRequest().body(result);
+    }
+
+    /**
      * API Tra cứu danh sách môn học của một Sinh viên cụ thể
      * URL ví dụ: GET http://localhost:8080/api/students/1/courses
-     * * @param userId ID sinh viên cần xem danh sách môn
+     * @param userId ID sinh viên cần xem danh sách môn
+     *
      * @return Tập hợp (Set) các Course mà sinh viên này đang học dưới dạng JSON
      */
     @GetMapping("/{userId}/courses")

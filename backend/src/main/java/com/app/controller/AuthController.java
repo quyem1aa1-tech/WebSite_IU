@@ -19,6 +19,14 @@ public class AuthController {
     @Autowired
     private AuthService service;
 
+    /**
+     * API Đăng nhập tài khoản (User Login)
+     * URL: POST http://localhost:8080/api/auth/login
+     * * @param request Chứa thông tin đăng nhập (username, password)
+     *
+     * @return 200 OK + Trả về "Welcome to ..." nếu tạo tài khoản thành công | 501/400 nếu có lỗi nghiệp vụ
+     *         hoặc hệ thống
+     */
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginRequest request) {
         LoginStatus status = service.loginUser(request.getUsername(), request.getPassword());

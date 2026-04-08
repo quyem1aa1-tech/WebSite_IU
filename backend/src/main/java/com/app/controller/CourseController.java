@@ -24,10 +24,11 @@ public class CourseController {
     /**
      * API Lấy toàn bộ danh sách khóa học hiện có trong Database.
      * URL: GET http://localhost:8080/api/courses
+     *
      * * @return Danh sách JSON chứa tất cả các môn học (ID, tên môn,...)
      */
     @GetMapping
-    public ResponseEntity<List<Course>> getAll() {
+    public ResponseEntity<List<Course>> getAllCourses() {
         // Gọi hàm getAllCourses từ Service để lấy dữ liệu từ Repository
         // Trả về mã 200 OK kèm danh sách môn học
         return ResponseEntity.ok(studentService.getAllCourses());

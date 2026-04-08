@@ -89,4 +89,23 @@ public class User {
     public void setCourses(Set<Course> courses) {
         this.courses = courses;
     }
+
+    // ================= THÊM NGÀY 4/8 ===================
+    public Course findCourseById(Long courseId) {
+        return courses.stream()
+                .filter(course -> course.getId().equals(courseId))
+                .findFirst().
+                orElse(null);
+    }
+
+    public Course findCourseByName(String name) {
+        return courses.stream()
+                .filter(course -> course.getCourseName().equalsIgnoreCase(name))
+                .findFirst().
+                orElse(null);
+    }
+
+    public int getCourseCount() {
+        return courses.size();
+    }
 }
