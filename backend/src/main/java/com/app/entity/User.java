@@ -105,7 +105,7 @@ public class User {
     // ================= THÊM NGÀY 4/8 ===================
     public Course findCourseById(String courseId) {
         return courses.stream()
-                .filter(course -> course.getCourseId().equals(courseId))
+                .filter(course -> course.getCourseId().equalsIgnoreCase(courseId))
                 .findFirst().
                 orElse(null);
     }

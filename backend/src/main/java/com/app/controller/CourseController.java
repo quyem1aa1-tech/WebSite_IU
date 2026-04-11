@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.app.entity.Course;
@@ -34,5 +35,20 @@ public class CourseController {
         // Gọi hàm getAllCourses từ Service để lấy dữ liệu từ Repository
         // Trả về mã 200 OK kèm danh sách môn học
         return ResponseEntity.ok(courseService.getAllCourses());
+    }
+
+    /**
+     * API Tìm khóa học hiện có trong Database.
+     * URL: GET http://localhost:8080/api/courses
+     *
+     * * @return Danh sách JSON chứa tất cả các môn học (ID, tên môn,...)
+     */
+    @GetMapping("/search")
+    public ResponseEntity<List<Course>> searchCourses(
+            @RequestParam(required = false) String courseName,
+            @RequestParam(required = false) String courseId
+    ) {
+        List<Course> filtered = courseService.searchCourses(courseName, courseId);
+        return ResponseEntity.ok(filtered);
     }
 }

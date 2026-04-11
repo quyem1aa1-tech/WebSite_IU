@@ -17,5 +17,18 @@ public class CourseService {
         return courseRepository.findAll();
     }
 
+    /**
+     * Tìm khóa học qua Id và tên.
+     */
+    public List<Course> searchCourses(String courseName, String courseId) {
 
+        // Find by Id first
+        if (courseId != null) return courseRepository.findByCourseIdContainingIgnoreCase(courseId);
+
+        // Find by name
+        if (courseName != null) return courseRepository.findByCourseNameContainingIgnoreCase(courseName);
+
+        // Find all
+        return getAllCourses();
+    }
 }
