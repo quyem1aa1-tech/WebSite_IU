@@ -16,15 +16,19 @@ public class Course {
     @Column(nullable = false, unique = true)
     private String courseName;
 
+    @Column(nullable = false, unique = true)
+    private String courseId;
+
     @ManyToMany()
     @JoinTable(name = "course_student", joinColumns = @JoinColumn(name = "course_id"), inverseJoinColumns = @JoinColumn(name = "user_id"))
-    private Set<User> liststudents = new HashSet<>();
+    private Set<User> listStudents = new HashSet<>();
 
     public Course() {
     }
 
-    public Course(String courseName) {
+    public Course(String courseName, String courseId) {
         this.courseName = courseName;
+        this.courseId = courseId;
     }
 
     public Long getId() {
@@ -33,6 +37,14 @@ public class Course {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getCourseId() {
+        return courseId;
+    }
+
+    public void setCourseId(String id) {
+        this.courseId = courseId;
     }
 
     public String getCourseName() {
@@ -44,29 +56,29 @@ public class Course {
     }
 
     // Đã đổi tên hàm cho chuẩn
-    public Set<User> getliststudents() {
-        return liststudents;
+    public Set<User> getListStudents() {
+        return listStudents;
     }
 
-    public void setliststudents(Set<User> liststudents) {
-        this.liststudents = liststudents;
+    public void setListStudents(Set<User> listStudents) {
+        this.listStudents = listStudents;
     }
 
     public int getStudentCount() {
-        if (this.liststudents == null) {
+        if (this.listStudents == null) {
             return 0;
         }
-        return this.liststudents.size();
+        return this.listStudents.size();
     }
 
     // Công cụ giúp học sinh
     public void addStudent(User user) {
-        this.liststudents.add(user);
+        this.listStudents.add(user);
         user.getCourses().add(this);
     }
 
     public void removeStudent(User user) {
-        this.liststudents.remove(user);
+        this.listStudents.remove(user);
         user.getCourses().remove(this);
     }
 

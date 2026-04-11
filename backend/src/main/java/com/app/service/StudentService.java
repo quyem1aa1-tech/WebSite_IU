@@ -1,6 +1,8 @@
 package com.app.service;
 
 import java.util.*;
+
+import com.app.dto.ProfileResponse;
 import com.app.entity.Course;
 import com.app.entity.User;
 import com.app.repository.CourseRepository;
@@ -30,13 +32,13 @@ public class StudentService {
      */
     @Transactional // Đảm bảo tính Atomic: Hoặc lưu cả 2 bên thành công, hoặc không lưu gì cả để
                    // tránh rác dữ liệu
-    public String enrollInCourse(Long userId, Long courseId) {
+    public String enrollInCourse(Long userId, String courseId) {
 
         // 1. Kiểm tra sự tồn tại của thực thể trong Database
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("LỖI: Không tìm thấy ID sinh viên: " + userId));
 
-        Course course = courseRepository.findById(courseId)
+        Course course = courseRepository.findByCourseId(courseId)
                 .orElseThrow(() -> new RuntimeException("LỖI: Không tìm thấy ID khóa học: " + courseId));
 
         // 2. Kiểm tra nghiệp vụ (Business Logic): Tránh đăng ký trùng lặp
@@ -58,7 +60,7 @@ public class StudentService {
     }
 
     @Transactional
-    public String dropCourse(Long userId, Long courseId) {
+    public String dropCourse(Long userId, String courseId) {
 
         // 1. Fetch the student and the course
         User user = userRepository.findById(userId)
@@ -89,11 +91,12 @@ public class StudentService {
     }
 
     /**
-     * Truy vấn toàn bộ danh sách khóa học hiện có trong hệ thống.
+     * Trả về thông tin cá nhân sinh viên có thể xem
      */
-    public List<Course> getAllCourses() {
-        return courseRepository.findAll();
+    public ProfileResponse getUserProfile(Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("LỖI: Không tìm thấy ID sinh viên: " + userId));
+
+        return new ProfileResponse(user.getStudentId(), user.getUsername(), user.getFullName(), user.getEmail());
     }
-
-
 }

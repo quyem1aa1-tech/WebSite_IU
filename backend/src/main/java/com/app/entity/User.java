@@ -14,6 +14,10 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    /// Có thể chuyển sang Class Student trong tương lai
+    @Column(nullable = false, unique = true)
+    private String studentId;
+
     @Column(nullable = false, unique = true)
     private String username;
 
@@ -39,7 +43,8 @@ public class User {
     }
 
     // Constructor with fields
-    public User(String username, String password, String fullName, String email, UserRole role) {
+    public User(String studentId, String username, String password, String fullName, String email, UserRole role) {
+        this.studentId = studentId;
         this.username = username;
         this.password = password;
         this.fullName = fullName;
@@ -98,9 +103,9 @@ public class User {
     }
 
     // ================= THÊM NGÀY 4/8 ===================
-    public Course findCourseById(Long courseId) {
+    public Course findCourseById(String courseId) {
         return courses.stream()
-                .filter(course -> course.getId().equals(courseId))
+                .filter(course -> course.getCourseId().equals(courseId))
                 .findFirst().
                 orElse(null);
     }
@@ -123,5 +128,15 @@ public class User {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    /// Có thể chuyển sang Class Student
+    public String getStudentId() {
+        return studentId;
+    }
+
+    /// Có thể chuyển sang Class Student
+    public void setStudentId(String studentId) {
+        this.studentId = studentId;
     }
 }

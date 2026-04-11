@@ -1,6 +1,8 @@
 package com.app.controller;
 
 import java.util.List;
+
+import com.app.service.CourseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,7 +21,7 @@ import com.app.service.StudentService;
 public class CourseController {
 
     @Autowired
-    private StudentService studentService; // Tạm thời dùng chung Service để quản lý logic tập trung
+    private CourseService courseService; // Tạm thời dùng chung Service để quản lý logic tập trung
 
     /**
      * API Lấy toàn bộ danh sách khóa học hiện có trong Database.
@@ -31,6 +33,6 @@ public class CourseController {
     public ResponseEntity<List<Course>> getAllCourses() {
         // Gọi hàm getAllCourses từ Service để lấy dữ liệu từ Repository
         // Trả về mã 200 OK kèm danh sách môn học
-        return ResponseEntity.ok(studentService.getAllCourses());
+        return ResponseEntity.ok(courseService.getAllCourses());
     }
 }

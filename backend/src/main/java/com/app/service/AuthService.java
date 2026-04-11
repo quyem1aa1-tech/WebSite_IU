@@ -3,7 +3,6 @@ package com.app.service;
 import com.app.dto.SignupRequest;
 import com.app.entity.LoginStatus;
 import com.app.entity.User;
-import com.app.entity.UserRole;
 import com.app.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -63,6 +62,18 @@ public class AuthService {
         // 4. Save to SQLite
         userRepository.save(user);
         return "SUCCESS: User registered";
+    }
+
+    public boolean forgotPassword(String email) {
+        Optional<User> user = userRepository.findByEmail(email);
+
+        // Email found
+        if (user.isPresent()) {
+            return true;
+        }
+
+        // Email not found
+        return false;
     }
 
     public Optional<User> getUserByUsername(String username) {

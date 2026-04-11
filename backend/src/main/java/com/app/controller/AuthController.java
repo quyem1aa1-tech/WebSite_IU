@@ -39,7 +39,7 @@ public class AuthController {
                         user.getUsername(), user.getRole(), user.getFullName()));
             }
 
-            case USER_NOT_FOUND -> ResponseEntity.status(404).body("Error: Username does not exist.");
+            case USER_NOT_FOUND -> ResponseEntity.status(401).body("Error: Username does not exist.");
 
             case WRONG_PASSWORD -> ResponseEntity.status(401).body("Error: Incorrect password. Please try again.");
 
@@ -76,4 +76,25 @@ public class AuthController {
             return ResponseEntity.status(501).body("Error: " + e.getMessage());
         }
     }
+
+    /**
+     * API Quên mật khẩu (Forgot Password)
+     * URL: POST http://localhost:8080/api/auth/forgot-pasword
+     * * @param request Chứa email
+     *
+     * @return 200 OK nếu nhập đúng email | 401 nếu có lỗi nghiệp vụ
+     */
+    @PostMapping("/forgot-password")
+    public ResponseEntity<String> forgotPassword(@RequestParam String email) {
+        boolean exists = service.forgotPassword(email);
+
+        // Trả về status
+        if (exists) {
+            return ResponseEntity.ok("A reset link has been sent.");
+        } else {
+            return ResponseEntity.status(401).body("Email not found.");
+        }
+    }
+
+
 }

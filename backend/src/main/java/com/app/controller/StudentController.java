@@ -1,5 +1,6 @@
 package com.app.controller;
 
+import com.app.dto.ProfileResponse;
 import com.app.entity.Course;
 import com.app.service.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +29,7 @@ public class StudentController {
      * @return 200 OK nếu thành công | 400 Bad Request kèm "error message" nếu logic nghiệp vụ bị lỗi (VD: trùng môn)
      */
     @PostMapping("/{userId}/enroll/{courseId}")
-    public ResponseEntity<String> enrollInCourse(@PathVariable Long userId, @PathVariable Long courseId) {
+    public ResponseEntity<String> enrollInCourse(@PathVariable Long userId, @PathVariable String courseId) {
         // Ủy quyền xử lý logic cho Service để giữ Controller gọn gàng (Thin Controller)
         String result = studentService.enrollInCourse(userId, courseId);
 
@@ -47,7 +48,7 @@ public class StudentController {
      * @return 200 OK nếu thành công | 400 Bad Request kèm "error message" nếu logic nghiệp vụ bị lỗi (VD: không đăng kí môn)
      */
     @DeleteMapping("/{userId}/drop/{courseId}")
-    public ResponseEntity<String> dropCourse(@PathVariable Long userId, @PathVariable Long courseId) {
+    public ResponseEntity<String> dropCourse(@PathVariable Long userId, @PathVariable String courseId) {
         String result = studentService.dropCourse(userId, courseId);
         return result.startsWith("SUCCESS")
                 ? ResponseEntity.ok(result)
@@ -62,9 +63,30 @@ public class StudentController {
      * @return Tập hợp (Set) các Course mà sinh viên này đang học dưới dạng JSON
      */
     @GetMapping("/{userId}/courses")
-    public ResponseEntity<Set<Course>> getCoursesByStudent(@PathVariable Long userId) {
+    public ResponseEntity<?> getCoursesByStudent(@PathVariable Long userId) {
         // Controller đóng vai trò "Điều phối viên": Nhận ID -> Gọi Service -> Trả kết quả
-        Set<Course> courses = studentService.getStudentCourses(userId);
-        return ResponseEntity.ok(courses);
+        try {
+            Set<Course> courses = studentService.getStudentCourses(userId);
+            return ResponseEntity.ok(courses);
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(401).body(e.getMessage());
+        }
+    }
+
+    /**
+     * API gửi trang thông tin cá nhân (profile)
+     * URL ví dụ: GET http://localhost:8080/api/students/1/profile
+     * @param userId ID sinh viên
+     *
+     * @return Thông tin cá nhân của sinh viên dưới dạng JSON
+     */
+    @PostMapping("/{userId}/profile")
+    public ResponseEntity<?> getUserProfile(@PathVariable Long userId) {
+        try {
+            ProfileResponse profile = studentService.getUserProfile(userId);
+            return ResponseEntity.ok(profile);
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(401).body(e.getMessage());
+        }
     }
 }

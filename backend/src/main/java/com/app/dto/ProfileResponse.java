@@ -3,43 +3,33 @@ package com.app.dto;
 import com.app.entity.UserRole;
 
 public class ProfileResponse {
-    private String status;
-    private String message;
     private String username;
-    private UserRole role;
     private String fullName;
+    private String studentId;
+    private String email;
 
     // Constructor
-    public ProfileResponse(String status, String message, String username, UserRole role, String fullName) {
-        this.status = status;
-        this.message = message;
+    public ProfileResponse(String studentId, String username, String fullName, String email) {
+        this.studentId = studentId;
         this.username = username;
-        this.role = role;
         this.fullName = fullName;
+        this.email = email;
     }
 
     // Getters and Setters (Important for JSON conversion)
-    public String getStatus() {
-        return status;
-    }
-
-    public String getMessage() {
-        return message;
-    }
-
     public String getUsername() {
         return username;
-    }
-
-    public UserRole getRole() {
-        return role;
     }
 
     public String getFullName() {
         return fullName;
     }
 
-    public void setFullName(String fullName) {
-        this.fullName = fullName;
+    public String getStudentId() {
+        return studentId;
+    }
+
+    public String getEmail() {
+        return email;
     }
 }
