@@ -31,8 +31,8 @@ public class DemoApplication {
         return args -> {
             // 1. Khởi tạo USER (Nếu trống)
             if (userRepository.count() == 0) {
-                userRepository.save(new User("VinhTruong@@", "123456", "Truong The Vinh", UserRole.STUDENT));
-                userRepository.save(new User("TrinhTranVinh", "123aa", "Dr. Tran Vinh", UserRole.TEACHER));
+                userRepository.save(new User("VinhTruong@@", "123456", "Truong The Vinh", "ITITIU25045@student.hcmiu.edu.vn", UserRole.STUDENT));
+                userRepository.save(new User("TrinhTranVinh", "123aa", "Dr. Tran Vinh", "ttv7627@gmail.com", UserRole.TEACHER));
                 System.out.println("✅ [Users] Created: VinhTruong@@ and TrinhTranVinh");
             }
 

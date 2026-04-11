@@ -1,6 +1,8 @@
 package com.app.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
+
 import java.util.HashSet; // MỚI THÊM VÀO
 import java.util.Set; // MỚI THÊM VÀO
 
@@ -18,6 +20,10 @@ public class User {
     @Column(nullable = false)
     private String password;
 
+    @Column(nullable = false, unique = true, length = 100)
+    @Email(message = "Please provide a valid email address")
+    private String email;
+
     @Column(name = "full_name")
     private String fullName;
 
@@ -33,10 +39,11 @@ public class User {
     }
 
     // Constructor with fields
-    public User(String username, String password, String fullName, UserRole role) {
+    public User(String username, String password, String fullName, String email, UserRole role) {
         this.username = username;
         this.password = password;
         this.fullName = fullName;
+        this.email = email;
         this.role = role;
     }
 
@@ -107,5 +114,14 @@ public class User {
 
     public int getCourseCount() {
         return courses.size();
+    }
+
+    // ================= THÊM NGÀY 4/11 ==================
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 }
