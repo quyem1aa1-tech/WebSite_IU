@@ -1,6 +1,5 @@
 package com.app.dto;
 
-import com.app.entity.UserRole;
 
 public class ProfileResponse {
     private String username;

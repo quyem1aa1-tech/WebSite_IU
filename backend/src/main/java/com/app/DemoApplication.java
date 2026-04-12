@@ -13,6 +13,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import java.util.List;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 @SpringBootApplication
 public class DemoApplication {
@@ -29,17 +30,18 @@ public class DemoApplication {
 
     @Bean
     @Transactional
-    CommandLineRunner initDatabase(UserRepository userRepository, CourseRepository courseRepository) {
+    CommandLineRunner initDatabase(UserRepository userRepository, CourseRepository courseRepository, PasswordEncoder passwordEncoder) { // Bổ sung PasswordEncoder vào đây {
         return args -> {
             // 1. Khởi tạo USER (Nếu trống)
             if (userRepository.count() == 0) {
-                userRepository.save(new User("ITITIU25045", "VinhTruong@@", "123456",
+                userRepository.save(new User("ITITIU25045", "VinhTruong@@", passwordEncoder.encode("123456"), // Mã hóa mật khẩu
                         "Truong The Vinh", "ITITIU25045@student.hcmiu.edu.vn", UserRole.STUDENT));
-                userRepository.save(new User("ITITIU25044", "TranVinh", "123aa",
+                
+                userRepository.save(new User("ITITIU25044", "TranVinh", passwordEncoder.encode("123aa"), // Mã hóa mật khẩu
                         "Trinh Tran Vinh", "ttv7627@gmail.com", UserRole.STUDENT));
-                System.out.println("✅ [Users] Created: VinhTruong@@ and TranVinh");
+                
+                System.out.println("✅ [Users] Created: VinhTruong@@ and TranVinh (Passwords Encrypted with BCrypt!)");
             }
-
             // 2. Khởi tạo COURSE (Nếu trống)
             if (courseRepository.count() == 0) {
                 Course c1 = new Course("Object-Oriented Programming", "IT031IU");

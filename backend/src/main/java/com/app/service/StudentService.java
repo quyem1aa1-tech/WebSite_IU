@@ -1,7 +1,5 @@
 package com.app.service;
 
-import java.util.*;
-
 import com.app.dto.ProfileResponse;
 import com.app.entity.Course;
 import com.app.entity.User;
