@@ -3,8 +3,8 @@ package com.app.entity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 
-import java.util.HashSet; // MỚI THÊM VÀO
-import java.util.Set; // MỚI THÊM VÀO
+import java.util.HashSet; 
+import java.util.Set;
 
 @Entity
 @Table(name = "users")
@@ -15,16 +15,16 @@ public class User {
     private Long id;
 
     /// Có thể chuyển sang Class Student trong tương lai
-    @Column(nullable = false, unique = true)
-    private String studentId;
+    @Column(name = "student_id", nullable = false)
+    private String studentId;   
 
-    @Column(nullable = false, unique = true)
+    @Column(name = "username", nullable = false)
     private String username;
 
-    @Column(nullable = false)
+    @Column(name = "password", nullable = false)
     private String password;
 
-    @Column(nullable = false, unique = true, length = 100)
+    @Column(name = "email", nullable = false, unique = true, length = 100)
     @Email(message = "Please provide a valid email address")
     private String email;
 

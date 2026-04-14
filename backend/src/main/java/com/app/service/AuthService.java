@@ -4,6 +4,8 @@ import com.app.dto.SignupRequest;
 import com.app.entity.LoginStatus;
 import com.app.entity.User;
 import com.app.repository.UserRepository;
+import com.app.util.PasswordUtils;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -13,76 +15,142 @@ import java.util.Optional;
 public class AuthService {
 
     @Autowired
+    private javax.sql.DataSource dataSource;
+
+    @Autowired
     private UserRepository userRepository;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
 
     public LoginStatus loginUser(String username, String password) {
-        Optional<User> userOpt = userRepository.findByUsername(username);
 
-        // 1. Check if user exists
+        // Kiểm tra null TRƯỚC khi gọi .trim()
+        if (username == null) {
+            System.err.println("Error: USER_NAME IS NULL!");
+            return LoginStatus.USER_NOT_FOUND;
+        }
+
+        String cleanUsername = username.trim();
+        System.out.println("Đang xử lý login cho: " + cleanUsername);
+        // Ghi chú: Kiểm tra xem Java đang kết nối vào file nào (Rất quan trọng!)
+        try (java.sql.Connection conn = dataSource.getConnection()) {
+            System.out.println("--- DB LOCATION: " + conn.getMetaData().getURL() + " ---");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        // Ghi chú: In ra chính xác những gì Thunder Client gửi lên
+        System.out.println("DEBUG: Searching for username -> [" + username + "]");
+
+        // Ghi chú: Liệt kê TẤT CẢ username đang có trong DB mà Java thấy
+        System.out.print("DEBUG: All usernames currently in Java's DB: ");
+        userRepository.findAll().forEach(u -> System.out.print("[" + u.getUsername() + "] "));
+        System.out.println();
+
+        Optional<User> userOpt = userRepository.findByUsername(username.trim());
+
         if (userOpt.isEmpty()) {
+            System.err.println("RESULT: USER NOT FOUND!");
             return LoginStatus.USER_NOT_FOUND;
         }
 
         User user = userOpt.get();
-
-        // 2. Check if password matches // !!REQUIRE ENCRYPTION!!
-        if (!user.getPassword().equals(password)) {
+        if (!passwordEncoder.matches(password, user.getPassword())) {
+            System.err.println("RESULT: WRONG PASSWORD!");
             return LoginStatus.WRONG_PASSWORD;
         }
 
-        // 3. Everything is correct
+        System.out.println("RESULT: SUCCESS!");
         return LoginStatus.SUCCESS;
-
     }
 
     // hàm yêu cầu
     public String registerUser(SignupRequest request) {
 
-        // 1. Check if user exists
-        if (userRepository.findByUsername(request.getUsername()).isPresent()) {
-            return "ERROR: Username already taken";
+        // 0. Kiểm tra trùng MSSV (Cực kỳ quan trọng)
+        if (userRepository.existsByStudentId(request.getStudentId())) {
+            throw new RuntimeException("Error: Student ID " + request.getStudentId() + " is already registered!");
         }
 
-        // 1.5 FIX: the user must write full name !
+        // 1. Kiểm tra Username đã tồn tại chưa
+        // Note: Nếu trùng username, ném lỗi ngay lập tức để dừng luồng xử lý
+        if (userRepository.existsByUsername(request.getUsername())) {
+            throw new RuntimeException(
+                    "Registration Error: Username '" + request.getUsername() + "' is already taken.");
+        }
+
+        // 2. Kiểm tra Email (Bước cực kỳ quan trọng cho tính năng Reset Password)
+        // Note: Đảm bảo một email chỉ được đăng ký một tài khoản duy nhất
+        if (request.getEmail() == null || request.getEmail().trim().isEmpty()) {
+            throw new RuntimeException("Registration Error: Email is required.");
+        }
+
+        if (userRepository.existsByEmail(request.getEmail())) {
+            throw new RuntimeException("Registration Error: Email '" + request.getEmail() + "' is already in use.");
+        }
+
+        // 3. Kiểm tra các thông tin bắt buộc khác
+        // Note: Sử dụng .trim() để loại bỏ khoảng trắng dư thừa ở hai đầu
         if (request.getFullName() == null || request.getFullName().trim().isEmpty()) {
-            return "ERROR: Full Name is required and cannot be blank";
-        }
-        if (request.getRole() == null) {
-            return "ERROR: Role is required! Please choose a role.";
+            throw new RuntimeException("Registration Error: Full Name cannot be blank.");
         }
 
-        // 2. Create new User entity
+        if (request.getRole() == null) {
+            throw new RuntimeException("Registration Error: User role is missing.");
+        }
+
+        // 4. Khởi tạo đối tượng User và nạp dữ liệu
         User user = new User();
+        user.setStudentId(request.getStudentId());
         user.setUsername(request.getUsername());
-        user.setFullName(request.getFullName());
+        user.setEmail(request.getEmail().trim());
+        user.setFullName(request.getFullName().trim());
         user.setRole(request.getRole());
 
-        // 3. SECURE THE PASSWORD (ĐÃ ĐƯỢC MÃ HÓA BẰNG BCRYPT)
-        // Lấy mật khẩu gốc -> Đưa qua máy xay -> Lưu vào biến user
-        String encodePassword = passwordEncoder.encode(request.getPassword());
-        user.setPassword(encodePassword);
+        // 5. MÃ HÓA MẬT KHẨU (Bảo mật tuyệt đối)
+        // Note: Biến 'encodedPassword' dùng thì quá khứ để chỉ mật khẩu đã qua xử lý
+        String encodedPassword = passwordEncoder.encode(request.getPassword());
+        user.setPassword(encodedPassword);
 
-        // 4. Save to Database (H2)
+        // 6. Lưu xuống Database
         userRepository.save(user);
 
-        System.out.println("Tài khoản mới: " + request.getUsername() + " | Pass mã hóa: " + encodePassword);
+        // 7. Ghi log kiểm tra trên Console (Chỉ in thông tin không nhạy cảm)
+        System.out.println("LOG: Registration successful for user: " + request.getUsername() + " with Email: "
+                + request.getEmail());
 
-        return "SUCCESS: User registered";
+        return "SUCCESS: User registered successfully!";
     }
 
-    public boolean forgotPassword(String email) {
-        Optional<User> user = userRepository.findByEmail(email);
+    public String processForgotPassword(String email) {
+        // Sửa lỗi Optional: Nếu không tìm thấy sẽ gán user = null
+        // Note: Tìm kiếm người dùng trong Database bằng Email
+        User user = userRepository.findByEmail(email).orElse(null);
 
-        // Email found
-        if (user.isPresent()) {
-            return true;
+        if (user == null) {
+            // Log tiếng Anh để dễ debug trên server
+            System.out.println("ERROR: Reset password failed. Email not found: " + email);
+            return null; // Trả về null thay vì false
         }
 
-        // Email not found
-        return false;
+        // 1. Tạo mật khẩu thô (Plain text)
+        // Note: Sử dụng Utility đã tạo trước đó
+        String rawPassword = PasswordUtils.generateRandomPassword(10);
+
+        // 2. Mã hóa mật khẩu trước khi lưu vào Database
+        // Note: passwordEncoder sẽ biến password thô thành chuỗi đã Hash (an toàn)
+        String hashedPass = passwordEncoder.encode(rawPassword);
+        user.setPassword(hashedPass);
+        userRepository.save(user);
+
+        // 3. Log thông tin ra Console bằng Tiếng Anh
+        // Note: Dòng này giúp bạn thấy mật khẩu ở màn hình đen của IntelliJ/Eclipse
+        System.out.println("SUCCESS: Temporary password generated for " + email);
+        System.out.println("DEBUG: New Raw Password: " + rawPassword);
+
+        // TRẢ VỀ mật khẩu thô để Controller có thể lấy và hiển thị ra màn hình
+        return rawPassword;
     }
 
     public Optional<User> getUserByUsername(String username) {
@@ -92,4 +160,31 @@ public class AuthService {
     public User saveUser(User user) {
         return userRepository.save(user);
     }
+
+    public String resetPassword(String email) {
+        // 1. Tìm user theo email. Nếu không thấy thì "quăng" lỗi ngay
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("Error: Email không tồn tại trên hệ thống!"));
+
+        // 2. Tạo một mật khẩu mới ngẫu nhiên (hoặc đặt mặc định để test)
+        // Sau này cậu có thể dùng thư viện để tạo chuỗi ngẫu nhiên xịn hơn
+        String rawNewPassword = "IU_" + (int) (Math.random() * 9000 + 1000); // Ví dụ: IU_4567
+
+        // 3. CỰC KỲ QUAN TRỌNG: Mã hóa mật khẩu mới trước khi lưu
+        // Nếu thiếu bước encode này, cậu sẽ không bao giờ đăng nhập được
+        String encodedPassword = passwordEncoder.encode(rawNewPassword);
+        user.setPassword(encodedPassword);
+
+        // 4. Lưu lại vào Database
+        userRepository.save(user);
+
+        // 5. Log ra Console để mình copy mật khẩu này đi test Login
+        System.out.println("-----> RESET SUCCESS <-----");
+        System.out.println("User: " + user.getUsername());
+        System.out.println("Mật khẩu mới (thô): " + rawNewPassword);
+
+        // Trả về mật khẩu chưa mã hóa để Controller hiển thị cho người dùng
+        return rawNewPassword;
+    }
+
 }
