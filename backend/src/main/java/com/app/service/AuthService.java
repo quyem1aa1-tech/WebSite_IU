@@ -4,9 +4,11 @@ import com.app.dto.SignupRequest;
 import com.app.entity.LoginStatus;
 import com.app.entity.User;
 import com.app.repository.UserRepository;
+import com.app.util.PasswordPolicy;
 import com.app.util.PasswordUtils;
 
 import jakarta.persistence.EntityManager;
+import org.passay.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -148,7 +150,6 @@ public class AuthService {
         String rawPassword = PasswordUtils.generateRandomPassword(10);
 
         // 2. Mã hóa mật khẩu trước khi lưu vào Database
-        // Note: passwordEncoder sẽ biến password thô thành chuỗi đã Hash (an toàn)
         String hashedPass = passwordEncoder.encode(rawPassword);
         user.setPassword(hashedPass);
         userRepository.save(user);
@@ -160,6 +161,42 @@ public class AuthService {
 
         // TRẢ VỀ mật khẩu thô để Controller có thể lấy và hiển thị ra màn hình
         return rawPassword;
+    }
+
+    /**
+     * Hàm đổi mật khẩu.
+     */
+    public String resetPassword(String email, String oldPassword, String newPassword, String confirmPassword) {
+        // Tìm user theo email.
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("Error: Email address does not exist."));
+
+        // Xét mật khẩu cũ
+        if (!passwordEncoder.matches(oldPassword, user.getPassword())) {
+            return "[401] Error: Wrong Password!";
+        }
+
+        // Xem mật khẩu mới dùng đúng form chưa
+        if (newPassword == null || !validatePassword(newPassword)) {
+            return "[403] Error: Incorrect Password Form.";
+        }
+
+        // Xác nhận lại mật khẩu
+        if (!newPassword.equals(confirmPassword)) {
+            return "[405] Error: Confirmation Failed.";
+        }
+
+        // Mã hóa mật khẩu mới trước khi lưu
+        String encodedPassword = passwordEncoder.encode(newPassword);
+        user.setPassword(encodedPassword);
+        userRepository.save(user);
+
+        // Log ra Console để copy mật khẩu đi test Login
+        System.out.println("-----> RESET SUCCESS <-----");
+        System.out.println("User: " + user.getUsername());
+        System.out.println("Mật khẩu mới (thô): " + newPassword);
+
+        return "[200] SUCCESS: Password Reset";
     }
 
     /**
@@ -177,30 +214,14 @@ public class AuthService {
     }
 
     /**
-     * Hàm đổi mật khẩu.
+     * Hàm xác thực dạng mật khẩu.
      */
-    public String resetPassword(String email) {
-        // Tìm user theo email.
-        User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new RuntimeException("Error: Email không tồn tại trên hệ thống!"));
+    public boolean validatePassword(String rawPassword) {
+        PasswordValidator validator = PasswordPolicy.getValidator();
+        PasswordData data = new PasswordData(rawPassword);
+        RuleResult result = validator.validate(data);
 
-        String rawNewPassword = "IU_" + (int) (Math.random() * 9000 + 1000); // Ví dụ: IU_4567
-
-        // 3. CỰC KỲ QUAN TRỌNG: Mã hóa mật khẩu mới trước khi lưu
-        // Nếu thiếu bước encode này, cậu sẽ không bao giờ đăng nhập được
-        String encodedPassword = passwordEncoder.encode(rawNewPassword);
-        user.setPassword(encodedPassword);
-
-        // 4. Lưu lại vào Database
-        userRepository.save(user);
-
-        // 5. Log ra Console để mình copy mật khẩu này đi test Login
-        System.out.println("-----> RESET SUCCESS <-----");
-        System.out.println("User: " + user.getUsername());
-        System.out.println("Mật khẩu mới (thô): " + rawNewPassword);
-
-        // Trả về mật khẩu chưa mã hóa để Controller hiển thị cho người dùng
-        return rawNewPassword;
+        return result.isValid();
     }
 
 }
