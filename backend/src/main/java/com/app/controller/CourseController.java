@@ -1,14 +1,16 @@
 package com.app.controller;
 
 import java.util.List;
+
+import com.app.service.CourseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.app.entity.Course;
-import com.app.service.StudentService;
 
 /**
  * CourseController: Cửa ngõ công khai để tra cứu thông tin về các Khóa học.
@@ -19,7 +21,7 @@ import com.app.service.StudentService;
 public class CourseController {
 
     @Autowired
-    private StudentService studentService; // Tạm thời dùng chung Service để quản lý logic tập trung
+    private CourseService courseService; // Tạm thời dùng chung Service để quản lý logic tập trung
 
     /**
      * API Lấy toàn bộ danh sách khóa học hiện có trong Database.
@@ -31,6 +33,22 @@ public class CourseController {
     public ResponseEntity<List<Course>> getAllCourses() {
         // Gọi hàm getAllCourses từ Service để lấy dữ liệu từ Repository
         // Trả về mã 200 OK kèm danh sách môn học
-        return ResponseEntity.ok(studentService.getAllCourses());
+        return ResponseEntity.ok(courseService.getAllCourses());
+    }
+
+    /**
+     * API Tìm khóa học hiện có trong Database.
+     * URL: GET http://localhost:8080/api/courses
+     *
+     * * @return Danh sách JSON chứa tất cả các môn học (ID, tên môn,...)
+     */
+    @GetMapping("/search")
+    public ResponseEntity<List<Course>> searchCourses(
+            @RequestParam(required = false) String courseName,
+            @RequestParam(required = false) String courseId
+    ) {
+        List<Course> filtered = courseService.searchCourses(courseName, courseId);
+        return ResponseEntity.ok(filtered);
     }
 }
+
