@@ -1,5 +1,5 @@
-package com.app.controller;
 
+package com.app.controller;
 import com.app.dto.LoginRequest;
 import com.app.dto.SignupRequest;
 import com.app.service.AuthService;
@@ -65,7 +65,7 @@ public class AuthController {
      * API Đăng ký tài khoản mới (User Registration)
      * URL: POST http://localhost:8080/api/auth/signup
      * * @param request Chứa thông tin đăng ký (username, password, fullname, role)
-     * 
+     *
      * @return 200 OK nếu tạo tài khoản thành công | 501/400 nếu có lỗi nghiệp vụ
      *         hoặc hệ thống
      */

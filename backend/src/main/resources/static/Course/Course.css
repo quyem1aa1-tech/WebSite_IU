@@ -1,0 +1,63 @@
+/* Tận dụng các biến màu từ home.css của bạn (#2c387e) */
+.course-container {
+    padding: 40px 50px;
+    background: #f4f4f4;
+    min-height: calc(100vh - 100px);
+}
+
+.registration-layout {
+    display: grid;
+    grid-template-columns: 1fr 300px;
+    gap: 40px;
+}
+
+.section-title {
+    color: #8b2121; /* Màu đỏ giống h1 ở Home */
+    border-bottom: 2px solid #2c387e;
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+}
+
+.course-item {
+    background: white;
+    padding: 15px;
+    margin-bottom: 10px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.course-item input[type="checkbox"] {
+    width: 20px;
+    height: 20px;
+    margin-right: 15px;
+    cursor: pointer;
+}
+
+.enrolled-box {
+    background: #e3f2fd;
+    padding: 20px;
+    border-radius: 10px;
+    border-left: 5px solid #2c387e;
+}
+
+.enrolled-item {
+    padding: 8px 0;
+    font-weight: bold;
+    color: #2c387e;
+}
+
+.search-box {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+.search-box input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
