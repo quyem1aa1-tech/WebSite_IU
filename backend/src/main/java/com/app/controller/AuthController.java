@@ -167,7 +167,7 @@ public class AuthController {
 
     /**
      * API Đổi mật khẩu (Reset Password)
-     * URL: POST http://localhost:8080/api/auth/forgot-password
+     * URL: POST http://localhost:8080/api/auth/reset-password
      * * @param request Chứa email, oldPassword, newPassword, confirmPassword
      *
      * @return 200 OK nếu nhập đúng | 401 nếu có lỗi nghiệp vụ
