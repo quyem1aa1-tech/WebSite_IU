@@ -46,14 +46,18 @@ public class AuthController {
             );
 
             // Trả về kết quả cho phía Client
-            return ResponseEntity.ok(status);
+            if (status == LoginStatus.SUCCESS) {
+                return ResponseEntity.ok(status);
+            } else {
+                return ResponseEntity.status(400).build();
+            }
         }
         catch (Exception e) {
             System.err.println("ERROR: Signup failed due to: " + e.getMessage());
             e.printStackTrace();
 
             // Trả về mã lỗi 500 (Server Error) kèm thông tin lỗi cho người dùng
-            return ResponseEntity.status(400).body("Server Error: " + e.getMessage());
+            return ResponseEntity.status(500).body("Server Error: " + e.getMessage());
         }
     }
 
