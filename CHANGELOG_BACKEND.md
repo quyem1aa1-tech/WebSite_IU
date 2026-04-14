@@ -1,5 +1,20 @@
 # NƠI NÀY DÙNG ĐỂ GHI LẠI LỊCH SỬ CẬP NHẬT
 
+## -- Ngày 4/14/2026 - 6:00 PM nằm trong branch: feature/edit-password -- Trương Thế Vinh 🕙
+
+Tạo file mới:
+- **backend\src\main\java\com\app\DemoApplication.java (nơi hỗ trợ tạo ra những mật khẩu random)**
+
+Chỉnh sửa file:
+-  backend\src\main\java\com\app\dto\LoginRequest.java (sử dụng @Data ; @NoArgsConstructor ; @AllArgsConstructor) 🌟🌟
+- **backend\src\main\java\com\app\dto\SignupRequest.java (thêm getter/setter email và studentID) 🌟🌟**
+- **backend\src\main\java\com\app\service\AuthService.java: chỉnh sửa login / registerUser / forgotpassword() 🌟🌟**
+
+
+**Đã chỉnh sửa: spring.jpa.hibernate.ddl-auto=none (nếu chưa tạo database thì phải chỉnh là create nha) ❗❗ ❗❗**
+
+
+
 ## -- Ngày 4/8/2026 - 10:10 PM nằm trong branch: feature/user-auth-logic -- Trấn Vinh🕙
 
 ## CHỈNH SỬA FILE:
