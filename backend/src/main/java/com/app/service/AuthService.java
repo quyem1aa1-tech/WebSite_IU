@@ -7,7 +7,6 @@ import com.app.repository.UserRepository;
 import com.app.util.PasswordPolicy;
 import com.app.util.PasswordUtils;
 
-import jakarta.persistence.EntityManager;
 import org.passay.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
