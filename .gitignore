@@ -37,8 +37,5 @@ desktop.ini
 *.log
 logs/
 
-# --- SQLite (Vì bạn dùng SQLite làm DB) ---
-*.db
-*.sqlite
 # Nếu bạn muốn giữ database mẫu trên GitHub thì hãy xóa 2 dòng trên. 
 # Nhưng thường người ta sẽ không đưa file DB lên Git.
