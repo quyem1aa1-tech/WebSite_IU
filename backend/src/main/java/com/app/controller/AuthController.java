@@ -164,4 +164,49 @@ public class AuthController {
             System.out.println("--- DEBUG END ---");
         }
     }
+
+    /**
+     * API Đổi mật khẩu (Reset Password)
+     * URL: POST http://localhost:8080/api/auth/reset-password
+     * * @param request Chứa email, oldPassword, newPassword, confirmPassword
+     *
+     * @return 200 OK nếu nhập đúng | 401 nếu có lỗi nghiệp vụ
+     */
+    @PostMapping("/reset-password")
+    public ResponseEntity<?> resetPassword(@RequestBody Map<String, String> newPasswordForm) {
+        /// Get Object -> variables
+        String email = newPasswordForm.get("email");
+        String oldPass = newPasswordForm.get("oldPassword");
+        String newPass = newPasswordForm.get("newPassword");
+        String confirmPass = newPasswordForm.get("confirmPassword");
+
+        /// Gọi hàm resetPassword()
+        try {
+            String result = authService.resetPassword(email, oldPass, newPass, confirmPass);
+
+            // SUCCESS
+            if (result.startsWith("[200]")) {
+                return ResponseEntity.ok(result);
+            }
+            // Mật khẩu cũ SAI
+            else if (result.startsWith("[401]")) {
+                return ResponseEntity.status(401).body(result);
+            }
+            // Mật khẩu mới SAI định dạng
+            else if (result.startsWith("[403]")) {
+                return ResponseEntity.status(403).body(result);
+            }
+            // Xác nhận lại mật khẩu SAI
+            else if (result.startsWith("[405]")) {
+                return ResponseEntity.status(405).body(result);
+            }
+            else {
+                return ResponseEntity.status(404).body("UNKNOWN ERROR!");
+            }
+
+        } catch (RuntimeException e) {
+            e.printStackTrace();
+            return ResponseEntity.status(404).body("Error: " + e.toString());
+        }
+    }
 }
