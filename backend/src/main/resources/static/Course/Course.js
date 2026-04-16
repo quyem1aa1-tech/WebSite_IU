@@ -59,7 +59,8 @@ function veGiaoDien() {
     }
 
     // In bảng đã đăng kí---
-    if (monDaDangKy.length === 0) {
+    if (monDaDangKy.length === 0) // nếu độ dài mảng bằng 0 tức là chưa có môn nào đăng kí
+    {
         bangDuoi.innerHTML = "<tr><td colspan='3'>Nothing!</td></tr>";
     } else {
         for (let i = 0; i < monDaDangKy.length; i++) {
