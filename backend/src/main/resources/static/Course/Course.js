@@ -1,6 +1,6 @@
 // 1. KHAI BÁO "BỘ NHỚ" CỦA TRANG WEB
 const SINH_VIEN_ID = localStorage.getItem("userId");
-const CUA_HANG_API = "http://localhost:8080/api";
+const CUA_HANG_API = "/api";
 
 let tatCaMonHoc = [];      // Kho tổng (chứa mọi thứ)
 let monDaDangKy = [];      // Giỏ hàng cá nhân (chứa đồ đã mua)
@@ -68,7 +68,6 @@ function veGiaoDien() {
                 <tr>
                     <td><input type="checkbox" class="enrolled-checkbox" value="${monDaMua.courseId}" checked></td>
                     <td>${monDaMua.courseName}</td>
-                    <td>3</td>
                 </tr>`;
         }
     }
