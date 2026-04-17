@@ -35,6 +35,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
             if (response.ok) {
                 // Trường hợp thành công (Status 200)
+                localStorage.setItem("email", email);
                 messageBox.style.color = "#155724";
                 messageBox.style.backgroundColor = "#d4edda";
                 messageBox.innerHTML = `<strong>Thành công!</strong> <br> ${resultText}`;
